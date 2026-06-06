@@ -59,6 +59,9 @@ Automating configuration backups
 Locating MAC addresses in large networks
 Managing port security entries
 Maintaining centralized logs of network operations
+
+
+
 فارسی
 معرفی پروژه
 این پروژه یک اپلیکیشن تحت وب مبتنی بر Flask برای مدیریت سوئیچ‌های شبکه و خودکارسازی کارهای مدیریتی شبکه است.
