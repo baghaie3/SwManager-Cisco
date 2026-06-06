@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Edit Device | Switch Management{% endblock %}
+
+{% block content %}
+
+<h2>Edit Device</h2>
+
+<form method="POST">
+
+{{ form.hidden_tag() }}
+
+<p>{{ form.name.label }}<br>{{ form.name(size=32) }}</p>
+<p>{{ form.ip.label }}<br>{{ form.ip(size=32) }}</p>
+
+<p>{{ form.device_type.label }}<br>{{ form.device_type() }}</p>
+
+<p>{{ form.profile_id.label }}<br>{{ form.profile_id(class="form-select") }}</p>
+
+<p>{{ form.location_id.label }}<br>{{ form.location_id(class="form-select") }}</p>
+
+<p>{{ form.groups.label }}<br>{{ form.groups(size=32) }}</p>
+
+<p>{{ form.status.label }}<br>{{ form.status() }}</p>
+
+<p>{{ form.description.label }}<br>{{ form.description(rows=3, cols=32) }}</p>
+
+<p><button type="submit">Save</button></p>
+
+</form>
+
+{% endblock %}

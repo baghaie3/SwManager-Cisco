@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block page_title %}Ping Terminal{% endblock %}
+{% block content %}
+
+<h2>Network CLI</h2>
+
+<div style="
+background:black;
+color:#00ff00;
+font-family:monospace;
+height:450px;
+overflow-y:auto;
+padding:15px;
+border-radius:5px;
+white-space:pre-wrap;
+">
+
+{% if output %}
+
+{{ output }}
+
+{% else %}
+
+Terminal v1.0
+Type command:
+
+ping 8.8.8.8
+
+{% endif %}
+
+</div>
+
+<form method="post" style="margin-top:10px">
+
+<span style="font-family:monospace">root@network:~#</span>
+
+<input
+name="command"
+style="
+width:400px;
+background:black;
+color:#00ff00;
+border:none;
+font-family:monospace;
+"
+autofocus>
+
+<button type="submit">Run</button>
+
+</form>
+
+{% endblock %}

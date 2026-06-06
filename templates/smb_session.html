@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}SMB Session{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h2>SMB Session ({{ ttl }} minutes)</h2>
+        <a href="{{ url_for('smb.smb_dashboard') }}" class="btn btn-secondary"> <--Return to SMB Dashboard</a>
+    </div>
+
+    {% if current %}
+        <div class="alert alert-info">
+            <strong>Current SMB Session:</strong><br>
+            Server: {{ current.server }}<br>
+            ShareName: {{ current.share }}<br>
+            UserName: {{ current.username }}<br>
+            Domain: {{ current.domain or "-" }}<br>
+            Expire (UTC Time): {{ current.expires_at }}
+        </div>
+    {% endif %}
+
+    <form method="post" action="{{ url_for('smb.smb_session') }}">
+        <div class="mb-3">
+            <label for="server" class="form-label">Server (IP / Hostname)</label>
+            <input type="text" class="form-control" id="server" name="server"
+                   value="{{ current.server if current else '' }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="share" class="form-label">Share</label>
+            <input type="text" class="form-control" id="share" name="share"
+                   value="{{ current.share if current else '' }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="username" class="form-label">UserName</label>
+            <input type="text" class="form-control" id="username" name="username"
+                   value="{{ current.username if current else '' }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" class="form-control" id="password" name="password"
+                   placeholder="{% if current %}••••••••{% endif %}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="domain" class="form-label">Domain (Optional)</label>
+            <input type="text" class="form-control" id="domain" name="domain"
+                   value="{{ current.domain if current else '' }}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save SMB Session</button>
+    </form>
+</div>
+{% endblock %}

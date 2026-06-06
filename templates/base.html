@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+
+<head>
+    <meta charset="UTF-8">
+
+    <title>
+        {% block title %}
+        Switch Management
+        {% endblock %}
+    </title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <link
+        rel="stylesheet"
+        href="{{ url_for('static', filename='css/style.css') }}"
+    >
+</head>
+
+<body>
+
+<div class="layout">
+
+{% if session.get("user_id") %}
+
+    <aside class="sidebar">
+
+        <div class="sidebar-logo">
+
+            <span class="logo-mark">
+                SM
+            </span>
+
+            <span class="logo-text">
+                Switch Manager
+            </span>
+
+            <a href="{{ url_for('auth.logout') }}">
+                Logout ({{ session.get("username") }})
+            </a>
+
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <a
+                href="{{ url_for('list_switches') }}"
+                class="nav-item {% if request.endpoint == 'list_switches' %}active{% endif %}"
+            >
+                <span>
+                    Switches
+                </span>
+            </a>
+
+            <a
+                href="{{ url_for('list_jobs') }}"
+                class="nav-item {% if request.endpoint in ['list_jobs','new_job'] %}active{% endif %}"
+            >
+                <span>
+                    Jobs
+                </span>
+            </a>
+
+            <a
+                href="{{ url_for('bulk_operations.bulk_operations') }}"
+                class="nav-item {% if request.endpoint in ['bulk_operations.bulk_operations'] %}active{% endif %}"
+            >
+                <span>
+                    Bulk Operations
+                </span>
+            </a>
+
+            <a href="{{ url_for('macsec.search_mac') }}"
+   class="nav-item {% if request.endpoint == 'macsec.search_mac' %}active{% endif %}">
+    MAC Search
+</a>
+            <a
+                href="{{ url_for('list_logs') }}"
+                class="nav-item {% if request.endpoint == 'list_logs' %}active{% endif %}"
+            >
+                <span>
+                    Logs
+                </span>
+            </a>
+
+            <a
+                href="{{ url_for('list_locations') }}"
+                class="nav-item {% if request.endpoint in ['list_locations','new_location','edit_location'] %}active{% endif %}"
+            >
+                <span>
+                    Locations
+                </span>
+            </a>
+
+            <a
+                href="{{ url_for('list_profiles') }}"
+                class="nav-item {% if request.endpoint in ['list_profiles','new_profile','edit_profile'] %}active{% endif %}"
+            >
+                <span>
+                    Profiles
+                </span>
+            </a>
+
+            <a
+                href="{{ url_for('recovery_smb.recovery_page') }}"
+                class="nav-item {% if request.endpoint in ['recovery_smb.recovery_page'] %}active{% endif %}"
+            >
+                <span>
+                    SMB Recovery
+                </span>
+            </a>
+
+            <a
+                href="{{ url_for('smb.smb_dashboard') }}"
+                class="nav-item {% if request.endpoint in ['smb.smb_dashboard'] %}active{% endif %}"
+            >
+                <span>
+                    SMB Center
+                </span>
+            </a>
+
+            <a
+                href="{{ url_for('topology.index') }}"
+                class="nav-item {% if request.endpoint == 'topology.index' %}active{% endif %}"
+            >
+                <span>
+                    Topology
+                </span>
+            </a>
+
+        </nav>
+
+    </aside>
+
+{% endif %}
+
+    <main class="content">
+
+        <header class="content-header">
+
+            <h1 class="page-title">
+
+                {% block page_title %}
+                {% endblock %}
+
+            </h1>
+
+        </header>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+
+            {% for category, msg in messages %}
+
+            <div class="alert alert-{{ category }}">
+
+                {{ msg }}
+
+            </div>
+
+            {% endfor %}
+
+        {% endif %}
+        {% endwith %}
+
+        <div class="page-container">
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
+
+    </main>
+
+</div>
+
+</body>
+</html>

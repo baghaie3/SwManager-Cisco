@@ -1,0 +1,280 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+SMB Recovery
+{% endblock %}
+
+{% block content %}
+
+<h2>
+</h2>
+
+<div class="card p-3 mb-4">
+
+    <h5>
+        Upload ZIP Backups
+    </h5>
+
+    <input
+        type="file"
+        id="zip_files"
+        multiple
+        accept=".zip"
+        class="form-control mb-3"
+    >
+
+    <button
+        class="btn btn-warning"
+        onclick="uploadFiles()"
+    >
+        Upload ZIP Files
+    </button>
+
+</div>
+
+<div
+    id="upload_status"
+    class="mb-4"
+></div>
+
+
+<div class="card p-3 mb-4">
+
+    <h5>
+        Recovery Key
+    </h5>
+
+    <input
+        type="text"
+        id="recovery_key"
+        class="form-control"
+        placeholder="STEGO_BACKUP_KEY_HEX"
+    >
+
+    <button
+        class="btn btn-success mt-3"
+        onclick="startRecovery()"
+    >
+        Start Recovery
+    </button>
+
+</div>
+
+
+<div id="results"></div>
+
+
+<script>
+
+async function uploadFiles() {
+
+    const files = document.getElementById(
+        "zip_files"
+    ).files
+
+    if (!files.length) {
+
+        alert(
+            "Select ZIP files"
+        )
+
+        return
+    }
+
+    let formData = new FormData()
+
+    for (const file of files) {
+
+        formData.append(
+            "zip_files",
+            file
+        )
+    }
+
+    try {
+
+        const response = await fetch(
+            "/recovery/upload",
+            {
+                method: "POST",
+                body: formData
+            }
+        )
+
+        const result = await response.json()
+
+        if (result.success) {
+
+            document.getElementById(
+                "upload_status"
+            ).innerHTML = `
+                <div class="alert alert-success">
+                    ${result.count} ZIP file(s) uploaded successfully
+                </div>
+            `
+
+        } else {
+
+            document.getElementById(
+                "upload_status"
+            ).innerHTML = `
+                <div class="alert alert-danger">
+                    ${result.message}
+                </div>
+            `
+        }
+
+    } catch (err) {
+
+        console.error(err)
+
+        document.getElementById(
+            "upload_status"
+        ).innerHTML = `
+            <div class="alert alert-danger">
+                Upload failed: ${err}
+            </div>
+        `
+    }
+}
+
+
+async function startRecovery() {
+
+    const key = document.getElementById(
+        "recovery_key"
+    ).value.trim()
+
+    if (!key) {
+
+        alert(
+            "Recovery key required"
+        )
+
+        return
+    }
+
+    let formData = new FormData()
+
+    formData.append(
+        "recovery_key",
+        key
+    )
+
+    document.getElementById(
+        "results"
+    ).innerHTML = `
+        <div class="alert alert-info">
+            Decoding backups...
+        </div>
+    `
+
+    try {
+
+        const response = await fetch(
+            "/recovery/decode",
+            {
+                method: "POST",
+                body: formData
+            }
+        )
+
+        const results = await response.json()
+
+        if (
+            results.success === false
+        ) {
+
+            document.getElementById(
+                "results"
+            ).innerHTML = `
+                <div class="alert alert-danger">
+                    ${results.message}
+                </div>
+            `
+
+            return
+        }
+
+        let html = ""
+
+        for (const item of results) {
+
+            if (item.success) {
+
+                const blob = new Blob(
+                    [item.content],
+                    {
+                        type: "text/plain"
+                    }
+                )
+
+                const url = URL.createObjectURL(
+                    blob
+                )
+
+                html += `
+                    <div class="card mb-3 border-success">
+
+                        <div class="card-body">
+
+                            <h5 class="text-success">
+                                ${item.filename}
+                            </h5>
+
+                            <a
+                                href="${url}"
+                                download="${item.filename}"
+                                class="btn btn-success"
+                            >
+                                Download TXT
+                            </a>
+
+                        </div>
+
+                    </div>
+                `
+
+            } else {
+
+                html += `
+                    <div class="card mb-3 border-danger">
+
+                        <div class="card-body">
+
+                            <h5 class="text-danger">
+                                ${item.zip}
+                            </h5>
+
+                            <div>
+                                ${item.error}
+                            </div>
+
+                        </div>
+
+                    </div>
+                `
+            }
+        }
+
+        document.getElementById(
+            "results"
+        ).innerHTML = html
+
+    } catch (err) {
+
+        console.error(err)
+
+        document.getElementById(
+            "results"
+        ).innerHTML = `
+            <div class="alert alert-danger">
+                Recovery failed: ${err}
+            </div>
+        `
+    }
+}
+
+</script>
+
+{% endblock %}

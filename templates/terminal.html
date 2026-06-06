@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block page_title %}Network Terminal{% endblock %}
+
+{% block content %}
+<div class="panel">
+    <div class="panel-header">
+        <h2>ترمینال شبکه 💻</h2>
+        <a href="{{ url_for('index') }}" class="btn btn-outline">← برگشت به داشبورد</a>
+    </div>
+
+    <!-- استایل ماتریکسی و جذاب برای ترمینال -->
+    <div style="background-color: #1e1e1e; color: #00ff00; padding: 20px; border-radius: 8px; font-family: 'Courier New', monospace; min-height: 400px; margin-top: 20px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);">
+        <p style="margin-bottom: 15px; color: #aaaaaa;">Welcome to Network Terminal v1.0<br>Type your commands below...</p>
+        
+        <div class="terminal-output" style="margin-bottom: 20px; white-space: pre-wrap;">
+            <!-- خروجی دستورات اینجا نمایش داده می‌شه -->
+            {% if output %}
+                {{ output }}
+            {% endif %}
+        </div>
+
+        <form method="POST" style="display: flex; gap: 10px; align-items: center;">
+            <span style="color: #00ff00;">root@network:~#</span>
+            <input type="text" name="command" style="flex: 1; background: transparent; border: none; border-bottom: 1px dashed #00ff00; color: #00ff00; outline: none; font-family: inherit; font-size: 16px; padding: 5px;" placeholder="ping 8.8.8.8" autofocus autocomplete="off">
+            <button type="submit" class="btn btn-outline" style="border-color: #00ff00; color: #00ff00; transition: 0.3s;" onmouseover="this.style.background='#00ff00'; this.style.color='#1e1e1e';" onmouseout="this.style.background='transparent'; this.style.color='#00ff00';">اجرا (Run)</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

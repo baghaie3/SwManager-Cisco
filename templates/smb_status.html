@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}SMB Status{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>SMB Status</h2>
+
+    {% if logs %}
+        <table class="table table-striped table-hover align-middle">
+            <thead>
+            <tr>
+                <th>زمان</th>
+                <th>Backup ID</th>
+                <th>سوییچ</th>
+                <th>Status</th>
+                <th>Path</th>
+                <th>Message</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for l in logs %}
+                <tr>
+                    <td>{{ l.created_at }}</td>
+                    <td>{{ l.switch_id }}</td>
+                    <td>{{ l.switch_name }}</td>
+                    <td>
+                        {% if l.status == 'success' %}
+                            <span class="badge bg-success">Success</span>
+                        {% else %}
+                            <span class="badge bg-danger">Failed</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ l.file_path or '-' }}</td>
+                    <td>{{ l.message }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">هیچ لاگ SMB موجود نیست.</div>
+    {% endif %}
+</div>
+{% endblock %}
