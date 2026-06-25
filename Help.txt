@@ -1,0 +1,49 @@
+python 3.14
+python -m venv SWManG
+.\SWManG\Scripts\activate 
+python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+xrt0wGoT-5fb3BTpQnuJWUazFZRDc0RTK3UAW2MqVKg=
+setx CRED_ENC_KEY "Jlea5IvKnWLNalt0MaMgU88EWHa4c78hH0b8-f_lnJM="
+python -c "import os, binascii; print(binascii.hexlify(os.urandom(32)).decode())"
+setx STEGO_BACKUP_KEY_HEX "dbd888d07a1bc42404247c3cc7b65c57409339ad9fc70bd64ba5797ecb77a837"
+restart powershell
+py .\app.py
+
+pip install --no-index --find-links=packages packages\*.whl
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+pip install --no-index --find-links=packages -r requirements.txt
+pip install --no-index --find-links=packages pandas setuptools security apscheduler flask_sqlalchemy flask_wtf flask fpdf netmiko sqlalchemy tzdata
+pip install --no-index --find-links=packages pandas
+pip install --no-index --find-links=packages setuptools
+pip install --no-index --find-links=packages security
+pip install --no-index --find-links=packages apscheduler
+pip install --no-index --find-links=packages flask_sqlalchemy
+pip install --no-index --find-links=packages flask_wtf
+pip install --no-index --find-links=packages flask
+pip install --no-index --find-links=packages fpdf
+pip install --no-index --find-links=packages netmiko
+pip install --no-index --find-links=packages sqlalchemy
+pip install --no-index --find-links=packages tzdata
+pip install --no-index --find-links=packages 
+pip install --no-index --find-links=packages 
+
+
+pip install --no-index --find-links=packages -r requirements.txt
+
+pip install --no-index --find-links=packages pytz
+
+pip install --trusted-host https://mirror-pypi.runflare.com -i https://mirror-pypi.runflare.com/simple/ PIL         
+pip install --trusted-host https://package-mirror.liara.ir -i https://package-mirror.liara.ir/repository/pypi/simple apscheduler.schedulers.background
+pip install --trusted-host https://mirror.iranserver.com -i https://mirror.iranserver.com/pypi/simple apscheduler.triggers.cron
+pip install --trusted-host https://archive.ito.gov.ir -i https://archive.ito.gov.ir/ PIL
+
+install pyinstaller
+ipaddress
+dCv7nvH05pr3ygQp9KicvISSLzf080iJNkBwaQDXvEE=
+pip download -r requirements.txt -d packages
+pip download Pillow -d packages
+pip download security -d packages
+pip download pytz -d packages -i https://mirror-pypi.runflare.com/simple/ --trusted-host mirror-pypi.runflare.com
+pip download flask -d packages -i https://package-mirror.liara.ir/repository/pypi/simple --trusted-host package-mirror.liara.ir
+
+pip install cryptography

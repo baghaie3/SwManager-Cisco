@@ -1,0 +1,164 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+Backups
+{% endblock %}
+
+{% block content %}
+
+<h2>Backups for {{ switch.name }}</h2>
+
+<a href="{{ url_for('list_switches') }}">
+    ⬅ Back
+</a>
+
+<br><br>
+
+<form method="POST"
+      action="{{ url_for('smb.smb_send_multiple') }}">
+
+    <button type="submit">
+        Send Selected to SMB
+    </button>
+
+    <br><br>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+
+        <thead>
+            <tr>
+
+                <th>
+                    <input type="checkbox" id="select-all">
+                </th>
+
+                <th>No</th>
+                <th>Time</th>
+                <th>Backup ID</th>
+                <th>SMB Status</th>
+                <th>Actions</th>
+
+            </tr>
+        </thead>
+
+        <tbody>
+
+        {% for b in backups %}
+
+            <tr>
+
+                <td>
+
+                    {% if b.smb_status != "success" %}
+
+                        <input type="checkbox"
+                               name="backup_ids"
+                               value="{{ b.backup_id }}">
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+                    {{ loop.index }}
+                </td>
+
+                <td>
+                    {{ b.time.strftime('%Y-%m-%d %H:%M:%S') }}
+                </td>
+
+                <td>
+                    <code>{{ b.backup_id }}</code>
+                </td>
+
+                <td>
+
+                    {% if b.smb_status == "success" %}
+
+                        <span style="color: green;">
+                            ✅ Sent
+                        </span>
+
+                    {% elif b.smb_status == "failed" %}
+
+                        <span style="color: red;">
+                            ❌ Failed
+                        </span>
+
+                    {% else %}
+
+                        <span style="color: orange;">
+                            ⏳ Not Sent
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+                <td>
+
+                    <a href="{{ url_for(
+                        'backup.download_stego_backup',
+                        backup_id=b.backup_id
+                    ) }}">
+                        Download
+                    </a>
+
+                    |
+
+                    {% if b.smb_status == "success" %}
+
+                        Already Sent
+
+                    {% else %}
+
+                        <a href="{{ url_for(
+                            'smb.smb_send_backup',
+                            backup_id=b.backup_id
+                        ) }}">
+                            Send SMB
+                        </a>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+        {% else %}
+
+            <tr>
+
+                <td colspan="6">
+                    No backups found.
+                </td>
+
+            </tr>
+
+        {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</form>
+
+<script>
+
+document
+.getElementById("select-all")
+.addEventListener("change", function () {
+
+    const checkboxes = document.querySelectorAll(
+        'input[name="backup_ids"]'
+    );
+
+    checkboxes.forEach(cb => {
+        cb.checked = this.checked;
+    });
+
+});
+
+</script>
+
+{% endblock %}

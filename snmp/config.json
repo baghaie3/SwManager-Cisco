@@ -1,0 +1,20 @@
+{
+  "esxi_hosts": [
+    {
+      "name": "Lab-ESXi1",
+      "ip": "192.168.18.71",
+      "community": "Monmcth@680"
+    }
+  ],
+  "switches": [
+    {
+      "name": "Lab-SW1",
+      "ip": "172.17.56.127",
+      "base_community": "mcth",
+      "vlans": {}
+    }
+  ],
+  "output": {
+    "json_file": "correlation_output.json"
+  }
+}

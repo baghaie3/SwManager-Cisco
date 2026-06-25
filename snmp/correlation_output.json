@@ -1,0 +1,46 @@
+{
+  "hosts": [
+    {
+      "name": "192.168.18.71",
+      "ip": "192.168.18.71",
+      "vmnics": [
+        {
+          "if_index": "",
+          "if_name": "Device vmnic4 at 11:00.0 i40en",
+          "mac": "d4:f5:ef:95:fd:70",
+          "links": []
+        },
+        {
+          "if_index": "",
+          "if_name": "Device vmnic5 at 11:00.1 i40en",
+          "mac": "d4:f5:ef:95:fd:78",
+          "links": []
+        },
+        {
+          "if_index": "",
+          "if_name": "Device vmnic0 at 02:00.0 ntg3",
+          "mac": "1c:98:ec:1a:77:0c",
+          "links": []
+        },
+        {
+          "if_index": "",
+          "if_name": "Device vmnic1 at 02:00.1 ntg3",
+          "mac": "1c:98:ec:1a:77:0d",
+          "links": []
+        },
+        {
+          "if_index": "",
+          "if_name": "Device vmnic2 at 02:00.2 ntg3",
+          "mac": "1c:98:ec:1a:77:0e",
+          "links": []
+        },
+        {
+          "if_index": "",
+          "if_name": "Device vmnic3 at 02:00.3 ntg3",
+          "mac": "1c:98:ec:1a:77:0f",
+          "links": []
+        }
+      ]
+    }
+  ]
+}

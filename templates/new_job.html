@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block page_title %}Create Job{% endblock %}
+
+{% block content %}
+
+<h2>Create Backup Job</h2>
+
+<form method="POST">
+
+{{ form.hidden_tag() }}
+
+<p>
+{{ form.switch_id.label }}<br>
+{{ form.switch_id() }}
+</p>
+
+<p>
+{{ form.trigger_type.label }}<br>
+{{ form.trigger_type() }}
+</p>
+
+<p>
+{{ form.interval_seconds.label }}<br>
+{{ form.interval_seconds() }}
+</p>
+
+<p>
+{{ form.hour.label }}<br>
+{{ form.hour() }}
+</p>
+
+<p>
+{{ form.minute.label }}<br>
+{{ form.minute() }}
+</p>
+
+<p>
+{{ form.day_of_week.label }}<br>
+{{ form.day_of_week() }}
+</p>
+
+<p>
+{{ form.day_of_month.label }}<br>
+{{ form.day_of_month() }}
+</p>
+
+<p class="btn btn-primary" style="background-color: #1d4ed8;color: white;">
+{{ form.submit() }}
+</p>
+
+
+
+</form>
+
+{% endblock %}

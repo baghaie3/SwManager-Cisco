@@ -1,0 +1,416 @@
+{% extends "base.html" %}
+{% block content %}
+
+<style>
+
+body {
+    overflow: hidden;
+}
+
+.main-layout {
+    display: grid;
+    grid-template-columns: 55% 45%;
+    gap: 15px;
+    height: 90vh;
+    padding: 10px;
+}
+
+.left-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* پنل راست برای کنسول و پروگرس بار */
+.right-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.section {
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 10px;
+    background: #fafafa;
+}
+
+.switch-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    max-height: 260px;
+    overflow: auto;
+}
+
+.switch-item {
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.console {
+    background: #0b0b0b;
+    color: #00ff9c;
+    font-family: monospace;
+    padding: 10px;
+    border-radius: 6px;
+
+    max-height: 500px;
+    overflow-y: auto;
+
+    line-height: 1.6;
+    font-size: 13px;
+    white-space: pre-wrap;
+}
+
+/* خطوط */
+.log-line {
+    margin-bottom: 4px;
+}
+
+/* عنوان سوئیچ */
+.log-switch {
+    color: #4fc3ff;
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* موفق */
+.log-success {
+    color: #3cff5c;
+}
+
+/* خطا */
+.log-error {
+    color: #ff4c4c;
+}
+
+/* دستور */
+.log-cmd {
+    color: #ffd54f;
+}
+
+.progressbar {
+    width: 100%;
+    background: #ddd;
+    height: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-inner {
+    height: 100%;
+    width: 0%;
+    background: #2ecc71;
+    transition: width 0.3s;
+}
+
+button {
+    padding: 6px 14px;
+    margin: 4px;
+}
+
+</style>
+
+
+
+<div class="main-layout">
+
+    <!-- ستون چپ: Operation + Filter + Switches -->
+    <div class="left-panel">
+
+        <!-- Operation + Run/Stop -->
+        <div class="section">
+
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:15px;">
+
+                <!-- Operation و فیلدها -->
+                <div style="flex:1;">
+                    <b>Operation</b>
+                    <br><br>
+
+                    <label>
+                        <input type="radio" name="operation" value="add_user" checked>
+                        Add / Update User
+                    </label>
+
+                    <label>
+                        <input type="radio" name="operation" value="delete_user">
+                        Delete User
+                    </label>
+
+                    <div id="add_user_fields">
+                        <br>
+
+                        Username
+                        <input type="text" id="new_user">
+
+                        <br>
+
+                        Password
+                        <input type="password" id="new_pass">
+
+                        <br>
+
+                        Privilege
+                        <select id="privilege">
+                            {% for i in range(15,0,-1) %}
+                                <option value="{{ i }}">Privilege {{ i }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div id="delete_user_fields" style="display:none">
+                        <br>
+                        Username to Delete
+                        <input type="text" id="del_user">
+                    </div>
+                </div>
+
+                <!-- دکمه‌های Run/Stop سمت راست Operation -->
+                <div style="display:flex; flex-direction:column; align-items:flex-end; gap:8px; min-width:110px;">
+                    <button id="runBtn">Run</button>
+                    <button id="stopBtn">Stop</button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- Filter + Switches -->
+        <div class="section">
+
+            <div style="display:flex; gap:20px; align-items:flex-start;">
+
+                <!-- Filter by Building -->
+                <div style="flex:0 0 40%;">
+                    <b>Filter by Building</b>
+                    <br>
+
+                    {% for b in buildings %}
+                        <label>
+                            <input type="checkbox" class="building-filter" value="{{ b }}">
+                            {{ b }}
+                        </label>
+                        <br>
+                    {% endfor %}
+                </div>
+
+                <!-- Switches List -->
+                <div style="flex:1;">
+                    <b>Switches List</b>
+                    <br>
+
+                    Selected Switches :
+                    <b id="selectedCount">0</b>
+
+                    <br><br>
+
+                    <label>
+                        <input type="checkbox" id="selectAll">
+                        Select All
+                    </label>
+
+                    <br><br>
+                </div>
+
+            </div>
+
+            <!-- Grid سوئیچ‌ها -->
+            <div class="switch-grid">
+
+                {% for sw in switches %}
+
+                    <label class="switch-item"
+                           data-building="{{ sw.location.building if sw.location else 'N/A' }}">
+
+                        <input type="checkbox"
+                               class="sw-check"
+                               value="{{ sw.id }}">
+
+                        <span>{{ sw.name }}</span>
+
+                    </label>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ستون راست: پروگرس بار + کنسول لایو -->
+    <div class="right-panel">
+
+        <div class="section">
+
+            <div class="progressbar" style="margin-bottom:8px;">
+                <div class="progress-inner" id="progressBar"></div>
+            </div>
+
+            <div class="console" id="console">
+                Ready...
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- حفظ کنسول تکراری قبلی، ولی مخفی تا DOM نشکند -->
+<div class="console" id="console-duplicate" style="display:none;">
+    Ready...
+</div>
+
+
+
+<script>
+
+let running = false
+let controller = null
+
+const consoleBox = document.getElementById("console")
+const progressBar = document.getElementById("progressBar")
+const runBtn = document.getElementById("runBtn")
+const stopBtn = document.getElementById("stopBtn")
+
+
+function log(msg) {
+    consoleBox.textContent += "\n" + msg
+    consoleBox.scrollTop = consoleBox.scrollHeight
+}
+
+
+function updateSelectedCount() {
+    let count = document.querySelectorAll(".sw-check:checked").length
+    document.getElementById("selectedCount").innerText = count
+}
+
+
+document.querySelectorAll(".sw-check").forEach(cb => {
+    cb.addEventListener("change", updateSelectedCount)
+})
+
+
+document.getElementById("selectAll").addEventListener("change", function () {
+    document.querySelectorAll(".sw-check").forEach(cb => {
+        cb.checked = this.checked
+    })
+    updateSelectedCount()
+})
+
+
+document.querySelectorAll(".building-filter").forEach(cb => {
+    cb.addEventListener("change", () => {
+        let building = cb.value
+        document.querySelectorAll(".switch-item").forEach(row => {
+            if (row.dataset.building === building) {
+                row.querySelector(".sw-check").checked = cb.checked
+            }
+        })
+        updateSelectedCount()
+    })
+})
+
+
+document.querySelectorAll("input[name=operation]").forEach(op => {
+    op.addEventListener("change", () => {
+        if (op.value === "add_user") {
+            document.getElementById("add_user_fields").style.display = "block"
+            document.getElementById("delete_user_fields").style.display = "none"
+        } else {
+            document.getElementById("add_user_fields").style.display = "none"
+            document.getElementById("delete_user_fields").style.display = "block"
+        }
+    })
+})
+
+
+runBtn.onclick = () => {
+
+    if (running) return
+
+    running = true
+    runBtn.disabled = true
+
+    consoleBox.textContent = "Starting operation...\n"
+
+    let form = new FormData()
+
+    let operation = document.querySelector("input[name=operation]:checked").value
+    form.append("operation", operation)
+
+    document.querySelectorAll(".sw-check:checked").forEach(cb => {
+        form.append("switch_ids", cb.value)
+    })
+
+    if (operation === "add_user") {
+        form.append("new_user", document.getElementById("new_user").value)
+        form.append("new_pass", document.getElementById("new_pass").value)
+        form.append("privilege", document.getElementById("privilege").value)
+    } else {
+        form.append("del_user", document.getElementById("del_user").value)
+    }
+
+    controller = new AbortController()
+
+    fetch("/bulk-operations/run_bulk", {
+        method: "POST",
+        body: form,
+        signal: controller.signal
+    })
+    .then(res => {
+
+        const reader = res.body.getReader()
+        const decoder = new TextDecoder()
+
+        function read() {
+            reader.read().then(({done, value}) => {
+
+                if (done) {
+                    running = false
+                    runBtn.disabled = false
+                    log("\nOperation finished")
+                    return
+                }
+
+                const text = decoder.decode(value)
+
+                text.split("\n").forEach(line => {
+                    if (line.startsWith("data:")) {
+                        let data = JSON.parse(line.replace("data:", ""))
+
+                        log("\n===== " + data.name + " =====")
+                        log(data.msg)
+
+                        progressBar.style.width = data.progress + "%"
+                    }
+                })
+
+                read()
+            })
+        }
+
+        read()
+
+    })
+
+}
+
+
+stopBtn.onclick = () => {
+    if (controller) {
+        controller.abort()
+        log("\nOperation stopped")
+        running = false
+        runBtn.disabled = false
+    }
+}
+
+</script>
+
+{% endblock %}

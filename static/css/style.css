@@ -1,0 +1,472 @@
+:root {
+    --bg-main: #f4f6f8;
+    --bg-panel: #ffffff;
+    --border: #d9dee5;
+
+    --text-main: #111827;
+    --text-muted: #6b7280;
+
+    --accent: #2563eb;
+    --accent-soft: #dbeafe;
+
+    --danger: #dc2626;
+
+    --sidebar-bg: #0f172a;
+    --sidebar-text: #e5e7eb;
+    --sidebar-active-bg: #1e293b;
+}
+
+/* RESET */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: var(--bg-main);
+    color: var(--text-main);
+}
+
+/* LAYOUT WITH SIDEBAR */
+
+.layout {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 20% 1fr;
+}
+
+/* SIDEBAR */
+
+.sidebar {
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.sidebar-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 6px;
+}
+
+.logo-mark {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    color: #ffffff;
+}
+
+.logo-text {
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    padding: 8px 10px;
+    border-radius: 6px;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.nav-item:hover {
+    background: rgba(148, 163, 184, 0.25);
+}
+
+.nav-item.active {
+    background: var(--sidebar-active-bg);
+    color: #ffffff;
+}
+
+/* MAIN CONTENT */
+
+.content {
+    padding: 16px 20px;
+}
+
+.content-header {
+    margin-bottom: 10px;
+}
+
+.page-title {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+/* FLASH MESSAGES */
+
+.flash {
+    list-style: none;
+    margin-bottom: 12px;
+}
+
+.flash li {
+    background: #ecfdf3;
+    border: 1px solid #bbf7d0;
+    color: #166534;
+    padding: 8px 10px;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+/* PAGE CONTAINER */
+
+.page-container {
+    max-width: ;
+}
+
+/* PANEL */
+
+.panel {
+    background: var(--bg-panel);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    padding: 16px 18px;
+    box-shadow: 0 2px 4px rgba(15, 23, 42, 0.03);
+}
+
+.panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.panel-header h2 {
+    font-size: 18px;
+}
+
+/* BUTTONS */
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 12px;
+    font-size: 13px;
+    border-radius: 4px;
+    border: 1px solid transparent;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: #1d4ed8;
+}
+
+.btn-outline {
+    background: transparent;
+    color: var(--accent);
+    border-color: var(--accent-soft);
+}
+
+.btn-outline:hover {
+    background: var(--accent-soft);
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background: #b91c1c;
+}
+
+/* TABLE */
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.table th,
+.table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+}
+
+.table th {
+    background: #f9fafb;
+    font-weight: 600;
+    color: #374151;
+}
+
+.table tr:nth-child(even) td {
+    background: #f9fafb;
+}
+
+/* FORMS */
+
+.form {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 10px 14px;
+    font-size: 14px;
+}
+
+.form label {
+    align-self: center;
+    color: var(--text-muted);
+}
+
+.form input,
+.form select,
+.form textarea {
+    padding: 6px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border);
+    font: inherit;
+}
+
+.form input:focus,
+.form select:focus,
+.form textarea:focus {
+    border-color: var(--accent);
+    outline: none;
+    box-shadow: 0 0 0 1px var(--accent-soft);
+}
+
+.form-actions {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+/* CARDS (OPTIONAL) */
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.card {
+    background: var(--bg-panel);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    padding: 12px 14px;
+}
+
+.card-title {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.card-text {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+/* TERMINAL STYLE */
+
+.terminal-panel {
+    background: #020617;
+    color: #22c55e;
+    font-family: monospace;
+    border-radius: 8px;
+    border: 1px solid #1f2937;
+    padding: 12px 14px;
+    min-height: 260px;
+}
+
+.terminal-output {
+    height: 220px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.terminal-input-row {
+    display: flex;
+    gap: 6px;
+    align-items: center;
+}
+
+.terminal-input-row input[type="text"] {
+    flex: 1;
+    padding: 5px 7px;
+    background: #020617;
+    border: 1px solid #374151;
+    border-radius: 4px;
+    color: #22c55e;
+    font-family: monospace;
+    font-size: 13px;
+}
+
+.terminal-input-row select {
+    padding: 5px 7px;
+    background: #020617;
+    border: 1px solid #374151;
+    border-radius: 4px;
+    color: #e5e7eb;
+    font-size: 13px;
+}
+
+.terminal-input-row button {
+    padding: 6px 10px;
+    background: transparent;
+    border-radius: 4px;
+    border: 1px solid #4ade80;
+    color: #4ade80;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.terminal-input-row button:hover {
+    background: rgba(74, 222, 128, 0.08);
+}
+
+td , th {
+    padding: 0px 2px 0px 2px; 
+}
+
+#switch_list{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px,1fr));
+    gap: 1px 2px;
+}
+
+.progress{
+    height: 25px;
+}
+
+#progress_bar{
+    background-color: #28a745 !important;
+    transition: width 0.4s ease;
+    color: #fff;
+    text-align: center;
+    line-height: 25px;
+}
+
+/* ==== GROUPED TABLE: هر ۵ ردیف یک گروه رنگی روی جدول فعلی ==== */
+
+/* انیمیشن نرم برای تغییر رنگ */
+.table-grouped-100 tr {
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+/* توجه: ردیف اول header است، پس data-row از ردیف 2 شروع می‌شود */
+
+/* گروه 1: ردیف‌های 1 تا 5 دیتا (loop.index 1–5) → در DOM: tr شماره 2 تا 6 */
+.table-grouped-100 tr:nth-child(32n+2),
+.table-grouped-100 tr:nth-child(32n+3) {
+    background-color: #aec2db;  /* رنگ 1 */
+}
+
+.table-grouped-100 tr:nth-child(32n+4),
+.table-grouped-100 tr:nth-child(32n+5) {
+    background-color: #b6dfcc;  /* رنگ 2 */
+}
+
+.table-grouped-100 tr:nth-child(32n+6),
+.table-grouped-100 tr:nth-child(32n+7) {
+    background-color: #e7e095;  /* رنگ 3 */
+}
+
+.table-grouped-100 tr:nth-child(32n+8),
+.table-grouped-100 tr:nth-child(32n+9) {
+    background-color: #e9acac;  /* رنگ 4 */
+}
+
+.table-grouped-100 tr:nth-child(32n+10),
+.table-grouped-100 tr:nth-child(32n+11) {
+    background-color: #9485df;  /* رنگ 5 */
+}
+
+.table-grouped-100 tr:nth-child(32n+12),
+.table-grouped-100 tr:nth-child(32n+13) {
+    background-color: #6b7280;  /* رنگ 6 */
+}
+
+.table-grouped-100 tr:nth-child(32n+14),
+.table-grouped-100 tr:nth-child(32n+15) {
+    background-color: #c2c522;  /* رنگ 7 */
+}
+
+.table-grouped-100 tr:nth-child(32n+16),
+.table-grouped-100 tr:nth-child(32n+17) {
+    background-color: #22c55e;  /* رنگ 8 */
+}
+
+.table-grouped-100 tr:nth-child(32n+18),
+.table-grouped-100 tr:nth-child(32n+19) {
+    background-color: #dda5a5;  /* رنگ 9 */
+}
+
+.table-grouped-100 tr:nth-child(32n+20),
+.table-grouped-100 tr:nth-child(32n+21) {
+    background-color: #e0f2fe;  /* رنگ 10 */
+}
+
+.table-grouped-100 tr:nth-child(32n+22),
+.table-grouped-100 tr:nth-child(32n+23) {
+    background-color: #cac158;  /* رنگ 11 */
+}
+
+.table-grouped-100 tr:nth-child(32n+24),
+.table-grouped-100 tr:nth-child(32n+25) {
+    background-color: #b7f7ce;  /* رنگ 12 */
+}
+
+.table-grouped-100 tr:nth-child(32n+26),
+.table-grouped-100 tr:nth-child(32n+27) {
+    background-color: #a193dd;  /* رنگ 13 */
+}
+
+.table-grouped-100 tr:nth-child(32n+28),
+.table-grouped-100 tr:nth-child(32n+29) {
+    background-color: #a17a7e;  /* رنگ 14 */
+}
+
+.table-grouped-100 tr:nth-child(32n+30),
+.table-grouped-100 tr:nth-child(32n+31) {
+    background-color: #cffafe;  /* رنگ 15 */
+}
+
+.table-grouped-100 tr:nth-child(32n+32),
+.table-grouped-100 tr:nth-child(32n+33) {
+    background-color: #6b86a1;  /* رنگ 16 */
+}
+/* کمی افکت hover برای تمام ردیف‌ها */
+
+
+
+
+/* اگر تعداد ردیف‌هایت کمتر از این است، مشکلی نیست؛ فقط گروه‌های بالاتر اعمال نمی‌شود */
+
+/* Hover برای همه گروه‌ها کمی تیره‌تر شود (همان رنگ، ولی کمی تیره‌تر) */
+.table-grouped-100 tr:hover {
+    filter: brightness(0.96);
+}

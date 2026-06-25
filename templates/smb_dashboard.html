@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block title %}SMB Center{% endblock %}
+
+{% block content %}
+
+<h2>SMB Center</h2>
+
+<div style="margin-bottom:10px;">
+SMB Session Expire Time (Tehran):
+<b>{{ smb_expire_time if smb_expire_time else "No Session" }}</b>
+</div>
+<div style="display: flex;">
+    <button>
+    <a href="{{ url_for('smb.smb_session') }}" class="btn btn-primary">
+         SMB Session Settings
+    </a>
+    </button>
+
+    <button>
+    <a href="{{ url_for('smb.smb_send_all') }}"
+       onclick="return confirm('All Pendings Backups Send to SMB Server ?');"
+       class="btn btn-primary">
+       Send All Pending
+    </a>
+    </button>
+
+    <button>
+    <form method="post" action="{{ url_for('smb.smb_send_multiple') }}">
+
+    <button type="submit"
+        onclick="return confirm('Send Selected Files(Backup) to SMB ?');" class="btn btn-primary">
+
+    Send Selected</button>
+
+
+    </button>
+
+
+
+            <div style="margin-top:5px ; align-items: center; margin-left: 20px;">
+                <label>Date:</label>
+                <select onchange="window.location.href='?date=' + this.value + '&unique_switch={{ 'true' if unique_filter else 'false' }}'">
+                    {% for day in days %}
+                    <option value="{{ day }}" {% if day == current_day %}selected{% endif %}>{{ day }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div style="
+    display: flex;
+    align-items: center;
+    margin-left: 35px;
+">
+                <input type="checkbox" id="uSwitch" {% if unique_filter %}checked{% endif %} 
+               onchange="window.location.href='?date={{ current_day }}&unique_switch=' + this.checked">
+                <label style="margin-left: 2px;" for="uSwitch">Only One</label>
+            </div>
+
+
+
+    {% if backups %}
+           
+
+            
+
+</div>
+
+<table border="1" cellpadding="6" style="margin-top: 1%; margin-left: 5%;">
+
+<tr>
+<th><input type="checkbox" id="select-all"></th>
+<th>No</th>
+<th>Switch</th>
+<th>Backup ID</th>
+<th>Backup Date</th>
+<th>SMB Send Date</th>
+<th>SMB Status</th>
+<th>Actions</th>
+</tr>
+
+{% for b in backups %}
+
+<tr>
+
+<td>
+{% if not b.sent %}
+<input type="checkbox" name="backup_ids" value="{{ b.backup_id }}" class="backup-checkbox">
+{% endif %}
+</td>
+
+<td>{{ loop.index }}</td>
+
+<td>{{ b.switch_name }}</td>
+
+<td><code>{{ b.backup_id }}</code></td>
+
+<td>
+{{ b.backup_time.strftime('%Y-%m-%d %H:%M:%S') if b.backup_time else "-" }}
+</td>
+
+<td>
+{% if b.smb_send_time %}
+{{ b.smb_send_time.strftime('%Y-%m-%d %H:%M:%S') }}
+{% else %}
+non send
+{% endif %}
+</td>
+
+<td>
+
+{% if b.sent %}
+<span style="color: green;">✅ Uploaded</span>
+{% else %}
+<span style="color: orange;">⏳ Pending</span>
+{% endif %}
+
+</td>
+
+<td>
+
+{% if not b.sent %}
+<a href="{{ url_for('smb.smb_send_backup', backup_id=b.backup_id) }}">
+Send SMB
+</a>
+{% else %}
+Already Sent
+{% endif %}
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="{{ url_for('list_switches') }}">
+⬅ Back to Switches
+</a>
+
+</form>
+
+{% else %}
+
+<table border="1" cellpadding="6" style="margin-top: 1%; margin-left: 5%;">
+<tr>
+<td>No backups found.</td>
+</tr>
+</table>
+
+{% endif %}
+
+<script>
+document.getElementById("select-all").addEventListener("change", function () {
+    const checkboxes = document.querySelectorAll(".backup-checkbox");
+    checkboxes.forEach(cb => {
+        cb.checked = this.checked;
+    });
+});
+</script>
+
+{% endblock %}

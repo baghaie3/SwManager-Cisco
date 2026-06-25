@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block page_title %}Locations{% endblock %}
+
+{% block content %}
+
+<h2>------------📍</h2>
+<button>
+
+    <a href="{{ url_for('new_location') }}" class="btn btn-primary">➕ New Location </a>
+
+</button>
+
+<br><br>
+
+<table border="1" cellpadding="6" style="margin-top: 1%; margin-left: 5%;">
+<tr>
+    <th>Building</th>
+    <th>Floor</th>
+    <th>Unit</th>
+    <th>Comment</th>
+    <th>Actions</th>
+</tr>
+
+{% for loc in locations %}
+<tr>
+    <td>{{ loc.building }}</td>
+    <td>{{ loc.floor or '-' }}</td>
+    <td>{{ loc.unit or '-' }}</td>
+    <td>{{ loc.description or '-' }}</td>
+    <td>
+        <button style="background-color: rgba(255, 255, 0, 0.644); padding: 2px 10px 2px 10px;"">
+                    <a href="{{ url_for('edit_location', location_id=loc.id) }}" >Edit</a>
+
+        </button>
+        <button>
+        <form method="POST" action="{{ url_for('delete_location', location_id=loc.id) }}" style="display:inline">
+            <button type="submit" onclick="return confirm('Are you suer ?')" style="background: red; font-weight: 700; padding: 2px 10px 2px 10px;">Delete</button>
+
+
+        </button>
+        </form>
+    </td>
+</tr>
+{% else %}
+<tr><td colspan="5">No Save Any Locations</td></tr>
+{% endfor %}
+
+</table>
+
+{% endblock %}

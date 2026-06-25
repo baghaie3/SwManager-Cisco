@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}New Device | Switch Management{% endblock %}
+
+{% block content %}
+
+<h2>Add New Device</h2>
+
+<form method="POST">
+
+{{ form.hidden_tag() }}
+
+<p>{{ form.name.label }}<br>{{ form.name(size=32) }}</p>
+<p>{{ form.ip.label }}<br>{{ form.ip(size=32, id="ip_field") }} <button type="button" onclick="pingSwitch()">Ping</button> <span id="ping_result"></span></p>
+
+<p>{{ form.device_type.label }}<br>{{ form.device_type() }}</p>
+
+<p>{{ form.profile_id.label }}<br>{{ form.profile_id(class="form-select") }}</p>
+
+<p>{{ form.location_id.label }}<br>{{ form.location_id(class="form-select") }}</p>
+
+<p>{{ form.groups.label }}<br>{{ form.groups(size=32) }}</p>
+
+<p>{{ form.status.label }}<br>{{ form.status() }}</p>
+
+<p>{{ form.description.label }}<br>{{ form.description(rows=3, cols=32) }}</p>
+
+<p><button type="submit" class="btn btn-primary">Create</button></p>
+
+</form>
+
+<script>
+function pingSwitch(){
+    const ip = document.getElementById("ip_field").value;
+    if(!ip){
+        alert("ابتدا IP را وارد کنید");
+        return;
+    }
+    document.getElementById("ping_result").innerText = " ... در حال بررسی";
+    fetch("/ping_check?ip=" + ip)
+    .then(response => response.json())
+    .then(data => {
+        if(data.ok){
+            document.getElementById("ping_result").innerText = "✅ Online";
+            document.getElementById("ping_result").style.color = "green";
+        }else{
+            document.getElementById("ping_result").innerText = "❌ Offline";
+            document.getElementById("ping_result").style.color = "red";
+        }
+    });
+}
+</script>
+
+{% endblock %}
